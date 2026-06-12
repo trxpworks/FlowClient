@@ -1,6 +1,6 @@
-# Discord Release Announcements
+# Nivryn Discord Release Announcements
 
-Flow Client announces every published GitHub Release in two Discord channels:
+Nivryn announces every published GitHub Release in two Discord channels:
 
 - Announcements: a short release summary and download link.
 - Changelog: the complete GitHub release notes, split across messages when necessary.
@@ -9,10 +9,10 @@ Flow Client announces every published GitHub Release in two Discord channels:
 
 Repeat these steps for the announcement and changelog channels:
 
-1. Open the Flow Client Discord server.
+1. Open the Nivryn Discord server.
 2. Open **Server Settings > Integrations > Webhooks**.
 3. Select **New Webhook**.
-4. Name it `Flow Client Updates`.
+4. Name it `Nivryn Updates`.
 5. Select the intended channel.
 6. Select **Copy Webhook URL**.
 
@@ -20,7 +20,7 @@ Treat webhook URLs like passwords. Do not post or commit them.
 
 ## 2. Add GitHub Actions secrets
 
-Open the `trxpworks/FlowClient` repository:
+Open the `trxpworks/NivrynClient` repository:
 
 1. Open **Settings > Secrets and variables > Actions**.
 2. Under **Secrets**, create:
@@ -34,18 +34,21 @@ Optional update-role ping:
 2. Right-click the update role and select **Copy Role ID**.
 3. In GitHub Actions, open the **Variables** tab.
 4. Create `DISCORD_UPDATE_ROLE_ID` with that numeric role ID.
-5. Ensure the webhook can mention the role in the announcement channel.
 
-The role is pinged only for real published releases, never manual tests.
+The role is pinged only for production announcements, never labelled tests.
 
-## 3. Test safely
+## 3. Run it manually
 
 1. Open the repository's **Actions** tab.
-2. Select **Announce release on Discord**.
+2. Select **Publish Nivryn release to Discord**.
 3. Select **Run workflow**.
-4. Leave `dry_run` enabled for the first run.
-5. Inspect the workflow log to preview both Discord payloads.
-6. Run it again with `dry_run` disabled to post a labelled test message.
+4. Leave `release_tag` as `latest`, or enter a release tag such as `v1.0.0`.
+5. Leave `test_mode` disabled to post a normal production announcement.
+6. Use `notes_override` when the selected release has no description or needs a corrected changelog.
+7. Enable `dry_run` to preview the payload without posting it.
+
+For a labelled test message, enable `test_mode`. The test version and notes
+fields are ignored during normal production runs.
 
 ## 4. Publish an update
 
@@ -58,3 +61,6 @@ When the release is published, GitHub automatically:
 4. Pings the configured update role, when present.
 
 Draft releases do not trigger announcements. Prereleases are labelled Preview.
+Manual production runs load their title, notes, channel, files, and URL from the
+selected GitHub Release, so they match automatic announcements and do not show
+the `TEST` label.
