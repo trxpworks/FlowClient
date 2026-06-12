@@ -91,7 +91,7 @@ def context_from_release(release, repository):
 def release_context():
     event_name = env("GITHUB_EVENT_NAME")
     event = load_event()
-    repository = env("GITHUB_REPOSITORY", "trxpworks/FlowClient")
+    repository = env("GITHUB_REPOSITORY", "trxpworks/NivrynClient")
 
     if event_name == "release" and isinstance(event.get("release"), dict):
         return context_from_release(event["release"], repository)
